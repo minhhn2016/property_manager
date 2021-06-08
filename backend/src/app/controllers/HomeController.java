@@ -88,4 +88,13 @@ public class HomeController extends Controller {
     }, executionContext.current());
   }
 
+  public CompletionStage<Result> delete(int id) {
+    return supplyAsync(() -> {
+      boolean status = propertyStore.deleteProperty(id);
+      if (!status) {
+        return notFound(Util.createResponse("Property with ID: " + id + " was not found", false));
+      }
+      return ok(Util.createResponse("Property with ID: " + id + " was deleted", true));
+    }, executionContext.current());
+  }
 }

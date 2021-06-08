@@ -67,6 +67,16 @@ public class HomeControllerTest extends WithApplication {
 		assertEquals(OK, result2.status());
 		assertTrue(result2.contentType().isPresent());
 		assertEquals("application/json", result2.contentType().get());
+
+		// Test deleting property created above
+		Http.RequestBuilder request3 = new Http.RequestBuilder()
+			.method(DELETE)
+			.uri("/properties/0");
+
+		Result result3 = route(app, request3);
+		assertEquals(OK, result3.status());
+		assertTrue(result3.contentType().isPresent());
+		assertEquals("application/json", result3.contentType().get());
 	}
 
 	@Test
@@ -94,7 +104,7 @@ public class HomeControllerTest extends WithApplication {
 	}
 
 	@Test
-	public void testUpdatePropertyTofail() {
+	public void testUpdatePropertyToFail() {
 		final ObjectNode jsonNode = Json.newObject();
 		jsonNode.put("propertyName", "Test property");
 		jsonNode.put("description", "Test");
@@ -112,6 +122,18 @@ public class HomeControllerTest extends WithApplication {
 
 		Result result = route(app, request);
 		assertEquals(INTERNAL_SERVER_ERROR, result.status());
+		assertTrue(result.contentType().isPresent());
+		assertEquals("application/json", result.contentType().get());
+	}
+
+	@Test
+	public void testDeletePropertyToFail() {
+		Http.RequestBuilder request = new Http.RequestBuilder()
+			.method(DELETE)
+			.uri("/properties/1");
+
+		Result result = route(app, request);
+		assertEquals(NOT_FOUND, result.status());
 		assertTrue(result.contentType().isPresent());
 		assertEquals("application/json", result.contentType().get());
 	}
