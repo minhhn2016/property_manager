@@ -11,7 +11,7 @@ import play.libs.Json;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.junit.Assert.assertEquals;
-import static play.mvc.Http.Status.OK;
+import static play.mvc.Http.Status.*;
 import static play.test.Helpers.*;
 import static play.test.Helpers.route;
 import static org.junit.Assert.assertTrue;
@@ -36,14 +36,24 @@ public class HomeControllerTest extends WithApplication {
 		jsonNode.put("country", "Test Country Rep.");
 
 		Http.RequestBuilder request = new Http.RequestBuilder()
-		.method(POST)
-		.bodyJson(jsonNode)
-		.uri("/properties");
+			.method(POST)
+			.bodyJson(jsonNode)
+			.uri("/properties");
 
 		Result result = route(app, request);
 		assertEquals(CREATED, result.status());
 		assertTrue(result.contentType().isPresent());
 		assertEquals("application/json", result.contentType().get());
+
+		// Test retrieving property created above
+		Http.RequestBuilder request1 = new Http.RequestBuilder()
+			.method(GET)
+			.uri("/properties/0");
+
+		Result result1 = route(app, request1);
+		assertEquals(OK, result1.status());
+		assertTrue(result1.contentType().isPresent());
+		assertEquals("application/json", result1.contentType().get());
 	}
 
 	@Test
@@ -54,6 +64,18 @@ public class HomeControllerTest extends WithApplication {
 
 		Result result = route(app, request);
 		assertEquals(OK, result.status());
+		assertTrue(result.contentType().isPresent());
+		assertEquals("application/json", result.contentType().get());
+	}
+
+	@Test
+	public void testRetrieveMethodNotFound() {
+		Http.RequestBuilder request = new Http.RequestBuilder()
+			.method(GET)
+			.uri("/properties/0");
+
+		Result result = route(app, request);
+		assertEquals(NOT_FOUND, result.status());
 		assertTrue(result.contentType().isPresent());
 		assertEquals("application/json", result.contentType().get());
 	}

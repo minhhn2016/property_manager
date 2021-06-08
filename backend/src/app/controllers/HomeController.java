@@ -61,4 +61,14 @@ public class HomeController extends Controller {
     }, executionContext.current());
   }
 
+  public CompletionStage<Result> retrieve(int id) {
+    return supplyAsync(() -> {
+      final Optional<Property> propertyOptional = propertyStore.getProperty(id);
+      return propertyOptional.map(property -> {
+        JsonNode jsonObject = Json.toJson(property);
+        return ok(Util.createResponse(jsonObject, true));
+      }).orElse(notFound(Util.createResponse("Property with ID: " + id + " was not found", false)));
+    }, executionContext.current());
+  }
+
 }
