@@ -48,7 +48,7 @@ public class HomeController extends Controller {
       return propertyOptional.map(property -> {
         JsonNode jsonObject = Json.toJson(property);
         return created(Util.createResponse(jsonObject, true));
-      }).orElse(internalServerError(Util.createResponse("Could not create data.", false)));
+      }).orElse(internalServerError(Util.createResponse("Could not create property", false)));
     }, executionContext.current());
   }
 
@@ -68,6 +68,23 @@ public class HomeController extends Controller {
         JsonNode jsonObject = Json.toJson(property);
         return ok(Util.createResponse(jsonObject, true));
       }).orElse(notFound(Util.createResponse("Property with ID: " + id + " was not found", false)));
+    }, executionContext.current());
+  }
+
+  public CompletionStage<Result> update(Http.Request request) {
+    JsonNode jsonBody = request.body().asJson();
+    return supplyAsync(() -> {
+      if (jsonBody == null) {
+        return badRequest(Util.createResponse("Expecting Json data", false));
+      }
+      Optional<Property> propertyOptional = propertyStore.updateProperty(Json.fromJson(jsonBody, Property.class));
+      return propertyOptional.map(property -> {
+        if (property == null) {
+          return notFound(Util.createResponse("Property not found", false));
+        }
+        JsonNode jsonObject = Json.toJson(property);
+        return ok(Util.createResponse(jsonObject, true));
+      }).orElse(internalServerError(Util.createResponse("Could not update property", false)));
     }, executionContext.current());
   }
 

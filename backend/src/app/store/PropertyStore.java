@@ -28,7 +28,7 @@ public class PropertyStore {
       properties.put(id, property);
       return Optional.ofNullable(property);
     }
-    return null;
+    return Optional.ofNullable(null);
   }
 
   public boolean deleteProperty(int id) {
