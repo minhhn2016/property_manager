@@ -1,3 +1,4 @@
 backend/src/project
 backend/src/target
 backend/src/logs
+microservices/facade/src/__pycache__

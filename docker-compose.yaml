@@ -14,3 +14,18 @@ services:
       dockerfile: Dockerfile.PlayFramework
     volumes:
       - ./backend/src:/opt
+  facade:
+    container_name: facade
+    networks: 
+      - pm
+    ports:
+      - 80:80
+    build:
+      context: ./microservices/facade
+      dockerfile: Dockerfile.Facade
+    environment: 
+      API_URL: http://backend:9000
+    volumes: 
+      - ./microservices/facade:/app
+    depends_on: 
+      - backend
