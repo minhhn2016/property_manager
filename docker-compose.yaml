@@ -7,8 +7,6 @@ services:
     container_name: backend
     networks:
       - pm
-    ports:
-      - 9000:9000
     build:
       context: ./backend
       dockerfile: Dockerfile.PlayFramework

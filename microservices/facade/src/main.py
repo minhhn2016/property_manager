@@ -44,10 +44,11 @@ def list_all_properties():
         for displaying the whole list on map component.
         Curvature of the Earth wasn't considered.
       """
-      if len(properties_list["list"]):
+      list_length = len(properties_list["list"])
+      if list_length:
         x = [item.get("position").get("longitude") for item in properties_list["list"]]
         y = [item.get("position").get("latitude") for item in properties_list["list"]]
-        properties_list["center"] = [sum(x) / len(properties_list["list"]), sum(y) / len(properties_list["list"])]
+        properties_list["center"] = [sum(y) / list_length, sum(x) / list_length]
 
       return properties_list
   except Exception as e:
