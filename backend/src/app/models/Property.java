@@ -10,6 +10,7 @@ public class Property {
   private String city;
   private String municipality;
   private String country;
+  private Position position;
 
   public Property() {}
 
@@ -22,7 +23,8 @@ public class Property {
     String postalCode,
     String city,
     String municipality,
-    String country
+    String country,
+    Position position
   ) {
     this.id = id;
     this.propertyName = propertyName;
@@ -33,6 +35,7 @@ public class Property {
     this.city = city;
     this.municipality = municipality;
     this.country = country;
+    this.position = position;
   }
 
   public int getId() {
@@ -105,5 +108,13 @@ public class Property {
 
   public void setCountry(String country) {
     this.country = country;
+  }
+
+  public Position getPosition() {
+    return position;
+  }
+
+  public void setPosition(Position position) {
+    this.position = position;
   }
 }
