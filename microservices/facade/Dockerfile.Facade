@@ -1,0 +1,20 @@
+FROM python:3.9
+
+RUN echo 'Europe/Helsinki' > /etc/timezone
+RUN ln -sf /usr/share/zoneinfo/Europe/Helsinki /etc/localtime
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . /app
+
+WORKDIR /app
+RUN pip install -e .
+
+WORKDIR /app/src
+
+CMD ["gunicorn", \
+  "--log-file", "-", \
+  "--bind", "0.0.0.0:80", \
+  "--reload", \
+  "main:app"]

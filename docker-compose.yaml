@@ -7,10 +7,23 @@ services:
     container_name: backend
     networks:
       - pm
-    ports:
-      - 9000:9000
     build:
       context: ./backend
       dockerfile: Dockerfile.PlayFramework
     volumes:
       - ./backend/src:/opt
+  facade:
+    container_name: facade
+    networks: 
+      - pm
+    ports:
+      - 80:80
+    build:
+      context: ./microservices/facade
+      dockerfile: Dockerfile.Facade
+    environment: 
+      API_URL: http://backend:9000
+    volumes: 
+      - ./microservices/facade:/app
+    depends_on: 
+      - backend
