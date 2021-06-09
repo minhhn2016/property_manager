@@ -5,6 +5,7 @@ from bottle import request, response, get, put, post, delete, hook
 
 
 from src.logger import get_module_logger
+from src.common import validate_json_body
 
 log = get_module_logger(__name__)
 log.debug("Starting...")
@@ -50,7 +51,7 @@ def list_all_properties():
 
       return properties_list
   except Exception as e:
-    log.debug("ERROR: Could not get list - {}".format(e))
+    log.error("ERROR: Could not get list - {}".format(e))
     return
 
   
@@ -60,8 +61,47 @@ def get_property_by_id(id):
     reponse_json = requests.get("{}/properties/{}".format(api_url, id)).json()
     return reponse_json.get("body")
   except Exception as e:
-    log.debug("ERROR: Could not get property with ID {} - {}".format(id, e))
+    log.error("ERROR: Could not get property with ID {} - {}".format(id, e))
     return
+
+
+@post("/properties")
+@validate_json_body(schema_filename="schema/create_property_schema.json")
+def create_property():
+  body = request.json
+  try:
+    response = requests.post("{}/properties".format(api_url), json=body)
+    return response
+  except Exception as e:
+    log.error("ERROR: Could not create property- {}".format(e))
+
+
+@put("/properties/<id>")
+@validate_json_body(schema_filename="schema/update_property_schema.json")
+def update_property(id):
+  body = request.json
+  try:
+    existing_property = get_property_by_id(id)
+    if not isinstance(existing_property, str):
+      response = requests.put("{}/properties/{}".format(api_url, id), json=body)
+      return response
+    else:
+      log.debug("ERROR: Could not update property - {}".format(existing_property))
+  except Exception as e:
+    log.error("ERROR: Could not update property with ID {} - {}".format(id, e))
+
+
+@delete("/properties/<id>")
+def delete_property(id):
+  try:
+    existing_property = get_property_by_id(id)
+    if not isinstance(existing_property, str):
+      response = requests.delete("{}/properties/{}".format(api_url, id))
+      return response
+    else:
+      log.debug("ERROR: Could not delete property - {}".format(existing_property))
+  except Exception as e:
+    log.error("ERROR: Could not delete property with ID {} - {}".format(id, e))
 
 
 app = bottle.app()
