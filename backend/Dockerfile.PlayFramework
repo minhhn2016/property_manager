@@ -1,0 +1,21 @@
+# Dockerfile to install necessary dependencies for a Play Framework application.
+FROM ubuntu
+
+# Install java and required packages
+RUN apt update
+RUN apt install -y default-jre curl gnupg
+RUN java -version
+
+# Install sbt
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list
+RUN echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list
+RUN curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key add
+RUN apt update
+RUN apt install -y sbt
+
+WORKDIR /opt
+COPY ./src .
+
+RUN sbt test
+
+CMD ["sbt", "run"]
