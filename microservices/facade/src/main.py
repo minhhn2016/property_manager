@@ -53,6 +53,16 @@ def list_all_properties():
     log.debug("ERROR: Could not get list - {}".format(e))
     return
 
+  
+@get("/properties/<id>")
+def get_property_by_id(id):
+  try:
+    reponse_json = requests.get("{}/properties/{}".format(api_url, id)).json()
+    return reponse_json.get("body")
+  except Exception as e:
+    log.debug("ERROR: Could not get property with ID {} - {}".format(id, e))
+    return
+
 
 app = bottle.app()
 
