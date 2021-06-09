@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Update a Property",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "propertyName": {
+      "type": "string"
+    },
+    "description": {
+      "type": ["string", "null"]
+    },
+    "street": {
+      "type": ["string", "null"]
+    },
+    "number": {
+      "type": ["number", "null"]
+    },
+    "postalCode": {
+      "type": ["string", "null"]
+    },
+    "city": {
+      "type": ["string", "null"]
+    },
+    "municipality": {
+      "type": ["string", "null"]
+    },
+    "country": {
+      "type": ["string", "null"]
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": ["id", "propertyName", "position"]
+}
