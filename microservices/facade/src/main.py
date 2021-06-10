@@ -74,17 +74,13 @@ def create_property():
     return
 
 
-@put("/api/properties/<id>")
+@put("/api/properties")
 @validate_json_body(schema_filename="schema/update_property_schema.json")
-def update_property(id):
+def update_property():
   body = request.json
   try:
-    existing_property = get_property_by_id(id)
-    if not isinstance(existing_property, str):
-      response = requests.put("{}/properties/{}".format(api_url, id), json=body)
-      return response
-    else:
-      log.debug("ERROR: Could not update property - {}".format(existing_property))
+    response = requests.put("{}/properties".format(api_url), json=body)
+    return response
   except Exception as e:
     log.error("ERROR: Could not update property with ID {} - {}".format(id, e))
     response.status = 400
