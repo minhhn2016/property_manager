@@ -29,3 +29,16 @@ declare interface IPropertyFormProps {
   open: boolean;
   handleClose: () => void;
 }
+
+declare interface IPropertiesListProps {
+  list: IProperty[],
+  openCreateForm: boolean;
+  handleOpenCreate: () => void;
+  handleCloseCreate: () => void;
+  openEditForm: boolean;
+  handleOpenEdit: () => void;
+  handleCloseEdit: () => void;
+  openDelete: boolean;
+  handleOpenDelete: () => void;
+  handleCloseDelete: () => void;
+}

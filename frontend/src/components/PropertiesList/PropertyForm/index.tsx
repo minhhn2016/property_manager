@@ -20,6 +20,8 @@ const PropretyForm = (props: IPropertyFormProps) => {
       longitude: 0
     }
   });
+
+  const [error, setError] = React.useState<string>();
   const { open, handleClose } = props;
   const headerText = props.property ? 'Edit your property' : 'Add a new property';
 
@@ -81,7 +83,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
         const requestSettings = props.property
           ? {
             method: 'PUT',
-            url: `http://localhost:8080/api/properties/${props.property.id}`,
+            url: `http://localhost:8080/api/properties`,
             body: JSON.stringify(Object.assign(property, {id: props.property.id}))
           } : {
             method: 'POST',
@@ -89,17 +91,18 @@ const PropretyForm = (props: IPropertyFormProps) => {
             body: JSON.stringify(property)
           }
 
-        console.log('body', requestSettings)
-        await fetch(requestSettings.url, {
+        const response = await fetch(requestSettings.url, {
           method: requestSettings.method,
           headers: {
             'Content-Type': 'application/json'
           },
           body: requestSettings.body,
         });
+
+        if (response.status !== 200) setError("Error occured, please check your input and try again!");
+        else handleClose();
       }
     )();
-    handleClose();
   }
 
   return (
@@ -191,12 +194,14 @@ const PropretyForm = (props: IPropertyFormProps) => {
               defaultValue={props.property?.description} 
               onChange={handleChange}
             />
-
           </div>
         </form>
+        <div>
+          <p>{error && error}</p>
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleSave(formValue)}>
+        <Button variant="contained" onClick={() => handleSave(formValue)}>
           Save
         </Button>
         <Button onClick={handleClose}>
