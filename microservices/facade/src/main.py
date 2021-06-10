@@ -1,7 +1,9 @@
 import os
 import bottle
 import requests
-from bottle import request, response, get, put, post, delete, hook
+import yaml
+from bottle import request, response, get, put, post, delete
+from wsgicors import CORS
 
 
 from src.logger import get_module_logger
@@ -12,22 +14,12 @@ log.debug("Starting...")
 
 api_url = os.environ.get("API_URL", "http://backend:9000")
 
-_allow_origin = "*"
-_allow_methods = "PUT, GET, POST, DELETE, OPTIONS"
-_allow_headers = "Authorization, Origin, Accept, Content-Type, X-Requested-With"
 
-@hook("after_request")
-def enable_cors():
-  """
-    Using bottle's hooks plugin to support cors for request from frontend
-    http://bottlepy.org/docs/dev/recipes.html#using-the-hooks-plugin
-  """
-  response.headers["Access-Control-Allow-Origin"] = _allow_origin
-  response.headers["Access-Control-Allow-Methods"] = _allow_methods
-  response.headers["Access-Control-Allow-Headers"] = _allow_headers
+with open("config.yaml") as config_file:
+    config = yaml.load(config_file, Loader=yaml.FullLoader)
 
 
-@get("/properties/all")
+@get("/api/properties/all")
 def list_all_properties():
   try:
     response_json = requests.get("{}/properties".format(api_url)).json()
@@ -53,31 +45,36 @@ def list_all_properties():
       return properties_list
   except Exception as e:
     log.error("ERROR: Could not get list - {}".format(e))
+    response.status = 400
     return
 
   
-@get("/properties/<id>")
+@get("/api/properties/<id>")
 def get_property_by_id(id):
   try:
     reponse_json = requests.get("{}/properties/{}".format(api_url, id)).json()
     return reponse_json.get("body")
   except Exception as e:
     log.error("ERROR: Could not get property with ID {} - {}".format(id, e))
+    response.status = 400
     return
 
 
-@post("/properties")
+@post("/api/properties")
 @validate_json_body(schema_filename="schema/create_property_schema.json")
 def create_property():
+  log.debug("REQUEST:::: {}".format(request))
   body = request.json
   try:
     response = requests.post("{}/properties".format(api_url), json=body)
     return response
   except Exception as e:
     log.error("ERROR: Could not create property- {}".format(e))
+    response.status = 400
+    return
 
 
-@put("/properties/<id>")
+@put("/api/properties/<id>")
 @validate_json_body(schema_filename="schema/update_property_schema.json")
 def update_property(id):
   body = request.json
@@ -90,9 +87,11 @@ def update_property(id):
       log.debug("ERROR: Could not update property - {}".format(existing_property))
   except Exception as e:
     log.error("ERROR: Could not update property with ID {} - {}".format(id, e))
+    response.status = 400
+    return
 
 
-@delete("/properties/<id>")
+@delete("/api/properties/<id>")
 def delete_property(id):
   try:
     existing_property = get_property_by_id(id)
@@ -103,9 +102,18 @@ def delete_property(id):
       log.debug("ERROR: Could not delete property - {}".format(existing_property))
   except Exception as e:
     log.error("ERROR: Could not delete property with ID {} - {}".format(id, e))
+    response.status = 400
+    return
 
+corscfg = config.get("cors")
+app = CORS(
+  bottle.app(),
+  headers=corscfg["headers"],
+  methods=corscfg["methods"],
+  origin=corscfg["origin"],
+  expose_headers=corscfg["expose_headers"],
+)
 
-app = bottle.app()
 
 if __name__ == "__main__":
   bottle.run(
