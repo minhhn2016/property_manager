@@ -17,7 +17,7 @@ services:
     networks: 
       - pm
     ports:
-      - 80:80
+      - 8080:8080
     build:
       context: ./microservices/facade
       dockerfile: Dockerfile.Facade
@@ -27,3 +27,16 @@ services:
       - ./microservices/facade:/app
     depends_on: 
       - backend
+  frontend:
+    container_name: frontend
+    networks:
+      - pm
+    ports:
+      - 3000:3000
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.Frontend
+    depends_on: 
+      - facade
+      - backend
+    
