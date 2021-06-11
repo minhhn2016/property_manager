@@ -36,7 +36,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
     setFormValue({
       ...formValue,
       street: street,
-      number: housenumber,
+      number: housenumber ? housenumber : "",
       postalCode: postcode,
       city: city,
       municipality: county,
@@ -175,21 +175,22 @@ const PropretyForm = (props: IPropertyFormProps) => {
               value={formValue.country}
               disabled
             />
-            <Divider variant="middle" />
+            <Divider style={{ margin: '1em' }} variant="middle" />
             <Typography variant="caption" component="p" gutterBottom>
               Enter some information about the property:
             </Typography>
             <TextField
               fullWidth
               name="propertyName"
-              required label="Property Name" 
+              label="Property Name" 
               defaultValue={props.property?.propertyName}
               onChange={handleChange}
             />
             <TextField
               fullWidth
               name="description" 
-              multiline 
+              multiline
+              rowsMax={4}
               label="Description"
               defaultValue={props.property?.description} 
               onChange={handleChange}

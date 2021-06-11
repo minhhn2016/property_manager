@@ -1,7 +1,9 @@
+import { CircularProgress, Grid } from '@material-ui/core';
 import React from 'react';
 import './App.css';
 
 import PropertiesList from './components/PropertiesList';
+import PropertiesMap from './components/PropertiesMap';
 
 function App() {
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -30,23 +32,31 @@ function App() {
     )();
   }, [openEditForm, openCreateForm, openDelete]);
 
-  if (loading) return <p>Loading</p>
+  if (loading) return <CircularProgress />
   return (
     <div className="App">
-      {data && (
-      <PropertiesList 
-        list={data.list}
-        openCreateForm={openCreateForm}
-        openEditForm={openEditForm}
-        handleOpenCreate={handleOpenCreate}
-        handleCloseCreate={handleCloseCreate}
-        handleOpenEdit={handleOpenEdit}
-        handleCloseEdit={handleCloseEdit}
-        openDelete={openDelete}
-        handleOpenDelete={handleOpenDelete}
-        handleCloseDelete={handleCloseDelete}
-      />
-      )}
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          {data && (
+            <PropertiesList 
+              list={data.list}
+              openCreateForm={openCreateForm}
+              openEditForm={openEditForm}
+              handleOpenCreate={handleOpenCreate}
+              handleCloseCreate={handleCloseCreate}
+              handleOpenEdit={handleOpenEdit}
+              handleCloseEdit={handleCloseEdit}
+              openDelete={openDelete}
+              handleOpenDelete={handleOpenDelete}
+              handleCloseDelete={handleCloseDelete}
+            />
+          )}
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          {data && <PropertiesMap {...data} />}
+        </Grid>
+      </Grid>
+      
     </div>
   );
 }

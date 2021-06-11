@@ -25,7 +25,7 @@ def list_all_properties():
     response_json = requests.get("{}/properties".format(api_url)).json()
     properties_list = {
       "list": [],
-      "center": []
+      "center": [60.2060265, 24.9118616]
     }
     if response_json.get("isSuccessful") == True:
       properties_list["list"] = response_json.get("body", [])
@@ -63,7 +63,6 @@ def get_property_by_id(id):
 @post("/api/properties")
 @validate_json_body(schema_filename="schema/create_property_schema.json")
 def create_property():
-  log.debug("REQUEST:::: {}".format(request))
   body = request.json
   try:
     response = requests.post("{}/properties".format(api_url), json=body)

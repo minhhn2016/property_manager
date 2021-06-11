@@ -1,6 +1,6 @@
 declare interface IAddress {
   street: string;
-  number: string;
+  number: string | null | undefined;
   postalCode: string;
   city: string;
   municipality: string;
@@ -8,8 +8,8 @@ declare interface IAddress {
 }
 
 declare interface IPosition {
-  latitude: Number;
-  longitude: Number;
+  latitude: number;
+  longitude: number;
 }
 
 declare interface IProperty extends IAddress {
@@ -19,9 +19,10 @@ declare interface IProperty extends IAddress {
   position: IPosition;
 }
 
+type CoordinatesList = [number, number]
 declare interface IAPIResponse {
-  list: IProperty[],
-  center: [Number, Number]
+  list: IProperty[];
+  center: CoordinatesList;
 }
 
 declare interface IPropertyFormProps {
@@ -42,3 +43,10 @@ declare interface IPropertiesListProps {
   handleOpenDelete: () => void;
   handleCloseDelete: () => void;
 }
+
+declare interface IMapProps {
+  data: IAPIResponse;
+  bounds: any;
+}
+
+declare module 'react-leaflet-markercluster';
