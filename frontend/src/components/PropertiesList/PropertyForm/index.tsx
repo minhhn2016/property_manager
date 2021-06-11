@@ -135,6 +135,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             </GeoapifyContext>
             <TextField 
               fullWidth
+              aria-label="street"
               name="street"
               label="Street"
               value={formValue.street}
@@ -142,6 +143,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             />
             <TextField 
               fullWidth
+              aria-label="number"
               name="number"
               label="Number"
               value={formValue.number}
@@ -149,6 +151,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             />
             <TextField 
               fullWidth
+              aria-label="postalCode"
               name="postalCode"
               label="Postal Code"
               value={formValue.postalCode}
@@ -156,6 +159,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             />
             <TextField 
               fullWidth
+              aria-label="city"
               name="city"
               label="City"
               value={formValue.city}
@@ -163,6 +167,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             />
             <TextField 
               fullWidth
+              aria-label="municipality"
               name="municipality"
               label="Municipality"
               value={formValue.municipality}
@@ -170,6 +175,7 @@ const PropretyForm = (props: IPropertyFormProps) => {
             />
             <TextField 
               fullWidth
+              aria-label="country"
               name="country"
               label="Country"
               value={formValue.country}
@@ -182,13 +188,15 @@ const PropretyForm = (props: IPropertyFormProps) => {
             <TextField
               fullWidth
               name="propertyName"
+              aria-label="propertyName"
               label="Property Name" 
               defaultValue={props.property?.propertyName}
               onChange={handleChange}
             />
             <TextField
               fullWidth
-              name="description" 
+              name="description"
+              aria-label="description" 
               multiline
               rowsMax={4}
               label="Description"

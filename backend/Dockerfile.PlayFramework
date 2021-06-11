@@ -16,6 +16,6 @@ RUN apt install -y sbt
 WORKDIR /opt
 COPY ./src .
 
-# RUN sbt test
+RUN sbt test
 
 CMD ["sbt", "run"]

@@ -44,9 +44,4 @@ declare interface IPropertiesListProps {
   handleCloseDelete: () => void;
 }
 
-declare interface IMapProps {
-  data: IAPIResponse;
-  bounds: any;
-}
-
 declare module 'react-leaflet-markercluster';
