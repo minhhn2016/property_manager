@@ -16,7 +16,7 @@
       "type": ["string", "null"]
     },
     "number": {
-      "type": ["number", "null"]
+      "type": ["string", "null", "number"]
     },
     "postalCode": {
       "type": ["string", "null"]

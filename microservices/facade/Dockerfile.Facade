@@ -15,6 +15,6 @@ WORKDIR /app/src
 
 CMD ["gunicorn", \
   "--log-file", "-", \
-  "--bind", "0.0.0.0:80", \
+  "--bind", "0.0.0.0:8080", \
   "--reload", \
   "main:app"]

@@ -1,0 +1,5 @@
+cors:
+  origin: "*"
+  expose_headers: "Authorize, Content-Range, Access-Control-Allow-Origin, Cross-Origin-Resource-Policy"
+  headers: "*"
+  methods: "HEAD, OPTIONS, GET, POST, PUT, DELETE, PATCH"
