@@ -10,7 +10,7 @@ A property (or any type of object) manager implemented with React frontend, Java
 - `cd property_manager`
 - `docker-compose build` will build necessary containers (this will take a while).
 - Once build step are done, run: `docker-compose up` (the Java backend server will take a while to completely ready)
-- When the console print as below, the application will be accessible via `http://localhost:3000`
+- When the console print as below, the application will be accessible via http://localhost:3000
 ```
 ...
 backend     | [info] p.c.s.AkkaHttpServer - Listening for HTTP on /0.0.0.0:9000
